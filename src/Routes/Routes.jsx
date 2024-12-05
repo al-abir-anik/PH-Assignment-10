@@ -4,6 +4,10 @@ import Root from "../Root/Root";
 import Home from "../Components/Home/Home";
 import SignIn from "../Components/NewUser/SignIn";
 import SignUp from "../Components/NewUser/SignUp";
+import PrivateRoute from "./PrivateRoute";
+import AddMovies from "./../Components/AddMovies/AddMovies";
+import MyFavourites from "./../Components/MyFavourites/MyFavourites";
+import AllMovies from "../Components/AllMovies/AllMovies";
 
 const Routes = createBrowserRouter([
   {
@@ -22,6 +26,26 @@ const Routes = createBrowserRouter([
       {
         path: "/signUp",
         element: <SignUp></SignUp>,
+      },
+      {
+        path: "/allMovies",
+        element: <AllMovies></AllMovies>,
+      },
+      {
+        path: "/addMovies",
+        element: (
+          <PrivateRoute>
+            <AddMovies></AddMovies>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/myFavourites",
+        element: (
+          <PrivateRoute>
+            <MyFavourites></MyFavourites>
+          </PrivateRoute>
+        ),
       },
     ],
   },

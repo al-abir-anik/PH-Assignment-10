@@ -27,12 +27,16 @@ const Navbar = () => {
           <li>
             <NavLink to={"/allMovies"}>All Movies</NavLink>
           </li>
-          <li>
-            <NavLink to={"/addMovies"}>Add Movies</NavLink>
-          </li>
-          <li>
-            <NavLink to={"/myFavourites"}>My Favorites</NavLink>
-          </li>
+          {user && (
+            <li>
+              <NavLink to={"/addMovies"}>Add Movies</NavLink>
+            </li>
+          )}
+          {user && (
+            <li>
+              <NavLink to={"/myFavourites"}>My Favorites</NavLink>
+            </li>
+          )}
           <li>
             <NavLink to={"/about"}>About</NavLink>
           </li>
