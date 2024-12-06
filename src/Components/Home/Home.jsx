@@ -1,10 +1,13 @@
+import Slider from "./Slider/Slider";
 
 const Home = () => {
-    return (
-        <div>
-            <p>sgsg</p>
-        </div>
-    );
+  return (
+    <main>
+      <div>
+        <Slider></Slider>
+      </div>
+    </main>
+  );
 };
 
 export default Home;
