@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const { createUser, signInWithGoogle } = useContext(AuthContext);
@@ -14,8 +15,7 @@ const SignUp = () => {
     const fullname = e.target.fullname.value;
     const photoUrl = e.target.photoUrl.value;
 
-    console.log(fullname,photoUrl);
-    
+    console.log(fullname, photoUrl);
 
     setErrorMessage("");
     if (password.length < 6) {
@@ -33,11 +33,13 @@ const SignUp = () => {
     createUser(email, password)
       .then((result) => {
         console.log(result.user);
+        toast.success("Signed Up Succesfully!");
         e.target.reset();
         navigate("/");
       })
       .catch((error) => {
         console.log("ERROR", error.message);
+        toast.error("ERROR", error.message);
       });
   };
 
@@ -45,10 +47,12 @@ const SignUp = () => {
     signInWithGoogle()
       .then((result) => {
         console.log(result);
+        toast.success("Signed Up Succesfully!");
         navigate("/");
       })
       .catch((error) => {
         console.log("ERROR", error.message);
+        toast.error("ERROR", error.message);
       });
   };
 
