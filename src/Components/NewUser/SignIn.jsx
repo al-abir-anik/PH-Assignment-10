@@ -1,18 +1,45 @@
-import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const SignIn = () => {
-  const { signInUser } = useContext(AuthContext);
+  const { signInUser, signInWithGoogle } = useContext(AuthContext);
+  const [wrongPass, setWrongPass] = useState("");
+  const navigate = useNavigate();
+  const emailRef = useRef();
 
   const handleSignin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
+    setWrongPass("");
     signInUser(email, password)
       .then((result) => {
         console.log(result.user);
+        e.target.reset();
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log("ERROR", error.message);
+        setWrongPass("Invalid Email or Password");
+      });
+  };
+
+  const handleForgotPassword = () => {
+    const emailForReset = emailRef.current.value;
+    if (!emailForReset) {
+      setWrongPass("Please provide a valid Email address");
+    } else {
+      navigate("/forgotPassword", { state: { email: emailForReset } });
+    }
+  };
+
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        console.log(result);
+        navigate("/");
       })
       .catch((error) => {
         console.log("ERROR", error.message);
@@ -33,6 +60,7 @@ const SignIn = () => {
             <input
               type="email"
               name="email"
+              ref={emailRef}
               placeholder="Enter your email"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -47,6 +75,7 @@ const SignIn = () => {
               placeholder="Enter your password"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {wrongPass && <p className="text-red-600">{wrongPass}</p>}
           </div>
           <div className="flex items-center justify-between">
             <button
@@ -55,12 +84,12 @@ const SignIn = () => {
             >
               Sign In
             </button>
-            <a
-              href="#"
+            <button
+              onClick={handleForgotPassword}
               className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-700"
             >
               Forgot Password?
-            </a>
+            </button>
           </div>
         </form>
         <p className="text-center text-gray-600 mt-4">
@@ -69,6 +98,16 @@ const SignIn = () => {
             Sign Up
           </Link>
         </p>
+
+        {/* Social Login */}
+        <div className="mt-4">
+          <button
+            className="w-full py-2 px-4 bg-[#456289] text-white font-semibold rounded-lg hover:bg-[#80A4C0] focus:outline-none focus:ring-2 focus:ring-[#80A4C0]"
+            onClick={handleGoogleSignIn}
+          >
+            Sign in with Google
+          </button>
+        </div>
       </div>
     </div>
   );

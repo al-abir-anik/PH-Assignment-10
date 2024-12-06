@@ -8,6 +8,7 @@ import PrivateRoute from "./PrivateRoute";
 import AddMovies from "./../Components/AddMovies/AddMovies";
 import MyFavourites from "./../Components/MyFavourites/MyFavourites";
 import AllMovies from "../Components/AllMovies/AllMovies";
+import ForgotPass from "../Components/NewUser/ForgotPass";
 
 const Routes = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const Routes = createBrowserRouter([
       {
         path: "/signUp",
         element: <SignUp></SignUp>,
+      },
+      {
+        path: "/forgotPassword",
+        element: <ForgotPass></ForgotPass>,
       },
       {
         path: "/allMovies",

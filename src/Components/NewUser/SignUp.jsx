@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const SignUp = () => {
-  const { createUser } = useContext(AuthContext);
+  const { createUser, signInWithGoogle } = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -12,9 +14,38 @@ const SignUp = () => {
     const fullname = e.target.fullname.value;
     const photoUrl = e.target.photoUrl.value;
 
+    console.log(fullname,photoUrl);
+    
+
+    setErrorMessage("");
+    if (password.length < 6) {
+      setErrorMessage("Password should be 6 characters or longer");
+      return;
+    }
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).+$/;
+    if (!passwordRegex.test(password)) {
+      setErrorMessage(
+        "Password required at least one UPPERCASE and one lowercase"
+      );
+      return;
+    }
+
     createUser(email, password)
       .then((result) => {
         console.log(result.user);
+        e.target.reset();
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log("ERROR", error.message);
+      });
+  };
+
+  const handleGoogleSignUp = () => {
+    signInWithGoogle()
+      .then((result) => {
+        console.log(result);
+        navigate("/");
       })
       .catch((error) => {
         console.log("ERROR", error.message);
@@ -71,6 +102,7 @@ const SignUp = () => {
               placeholder="Create a password"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errorMessage && <p className="text-red-600">{errorMessage}</p>}
           </div>
 
           <button
@@ -86,6 +118,15 @@ const SignUp = () => {
             Sign In
           </Link>
         </p>
+
+        <div className="mt-4">
+          <button
+            onClick={handleGoogleSignUp}
+            className="w-full py-2 px-4 bg-[#456289] text-white font-semibold rounded-lg hover:bg-[#80A4C0] focus:outline-none focus:ring-2 focus:ring-[#80A4C0]"
+          >
+            Sign up with Google
+          </button>
+        </div>
       </div>
     </div>
   );
