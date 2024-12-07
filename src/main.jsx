@@ -11,7 +11,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <RouterProvider router={Routes}></RouterProvider>
-      <ToastContainer position="top-center"></ToastContainer>
+      <ToastContainer ></ToastContainer>
     </AuthProvider>
   </StrictMode>
 );

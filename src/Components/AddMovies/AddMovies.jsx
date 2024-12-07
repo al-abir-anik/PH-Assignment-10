@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Rating } from "react-simple-star-rating";
+import { toast } from "react-toastify";
 
 const AddMovies = () => {
   const [rating, setRating] = useState(0);
@@ -24,6 +25,22 @@ const AddMovies = () => {
       releaseYear,
       summary,
     };
+
+    // Send newMovie data to server
+    fetch("http://localhost:5000/movie", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newmovie),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.insertedId) {
+            toast.success("New Movie Added Successfully")
+        }
+      });
   };
 
   return (

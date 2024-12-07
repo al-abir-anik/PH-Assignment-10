@@ -31,7 +31,7 @@ const Slider = () => {
   ];
 
   return (
-    <section className="w-full">
+    <div className="w-full">
       <Swiper
         modules={[Autoplay, Navigation]}
         spaceBetween={0}
@@ -57,7 +57,7 @@ const Slider = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-    </section>
+    </div>
   );
 };
 
