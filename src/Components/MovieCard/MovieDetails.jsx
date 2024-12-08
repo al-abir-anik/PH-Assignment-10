@@ -1,11 +1,12 @@
 import React from "react";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const MovieDetails = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const movieData = useLoaderData();
   const movieCard = movieData.find((m) => m._id == id);
-
   const {
     _id,
     posterUrl,
@@ -18,7 +19,32 @@ const MovieDetails = () => {
   } = movieCard;
 
   const handleDelete = (id) => {
-    console.log(id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:5000/movie/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.deletedCount > 0) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your movie has been deleted.",
+                icon: "success",
+              });
+              navigate("/allMovies");
+            }
+          });
+      }
+    });
   };
 
   return (
