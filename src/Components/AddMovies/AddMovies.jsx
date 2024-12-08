@@ -27,7 +27,7 @@ const AddMovies = () => {
     };
 
     // Send newMovie data to server
-    fetch("http://localhost:5000/movie", {
+    fetch("https://movie-track-server.vercel.app/movie", {
       method: "POST",
       headers: {
         "content-type": "application/json",

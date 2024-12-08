@@ -21,7 +21,7 @@ const Routes = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
-        loader: () => fetch("http://localhost:5000/movie"),
+        loader: () => fetch("https://movie-track-server.vercel.app/movie"),
       },
       {
         path: "/signIn",
@@ -38,7 +38,7 @@ const Routes = createBrowserRouter([
       {
         path: "/allMovies",
         element: <AllMovies></AllMovies>,
-        loader: () => fetch("http://localhost:5000/movie"),
+        loader: () => fetch("https://movie-track-server.vercel.app/movie"),
       },
       {
         path: "/movieDetails/:id",
@@ -47,7 +47,7 @@ const Routes = createBrowserRouter([
             <MovieDetails></MovieDetails>
           </PrivateRoute>
         ),
-        loader: () => fetch("http://localhost:5000/movie"),
+        loader: () => fetch("https://movie-track-server.vercel.app/movie"),
       },
       {
         path: "/addMovies",
@@ -65,7 +65,7 @@ const Routes = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/movie/${params.id}`),
+          fetch(`https://movie-track-server.vercel.app/movie/${params.id}`),
       },
       {
         path: "/myFavourites",
@@ -74,7 +74,7 @@ const Routes = createBrowserRouter([
             <MyFavourites></MyFavourites>
           </PrivateRoute>
         ),
-        loader: () => fetch("http://localhost:5000/favourites"),
+        loader: () => fetch("https://movie-track-server.vercel.app/favourites"),
       },
     ],
   },

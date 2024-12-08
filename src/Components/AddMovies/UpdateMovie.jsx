@@ -35,7 +35,7 @@ const UpdateMovie = () => {
     };
 
     // Send updatedMovie data to server
-    fetch(`http://localhost:5000/movie/${_id}`, {
+    fetch(`https://movie-track-server.vercel.app/movie/${_id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",

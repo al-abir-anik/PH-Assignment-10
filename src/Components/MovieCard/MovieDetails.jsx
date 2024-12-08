@@ -31,7 +31,7 @@ const MovieDetails = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/movie/${id}`, {
+        fetch(`https://movie-track-server.vercel.app/movie/${id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())
@@ -55,7 +55,7 @@ const MovieDetails = () => {
       movieId: `${_id}`,
     };
 
-    fetch(`http://localhost:5000/favourites`, {
+    fetch(`https://movie-track-server.vercel.app/favourites`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

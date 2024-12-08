@@ -14,7 +14,7 @@ const FavouriteMovieCard = ({ movie, favouriteMovies, setFavouriteMovies }) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/favourites/${id}`, {
+        fetch(`https://movie-track-server.vercel.app/favourites/${id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())
