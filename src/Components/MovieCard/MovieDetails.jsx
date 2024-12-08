@@ -1,5 +1,5 @@
 import React from "react";
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { Link, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const MovieDetails = () => {
@@ -114,6 +114,11 @@ const MovieDetails = () => {
               >
                 Delete Movie
               </button>
+              <Link to={"/updateMovie"}>
+                <button className="btn bg-[#9538e2] rounded-full text-white font-semibold text-lg px-10">
+                 Update Movie
+                </button>
+              </Link>
             </div>
           </div>
         </div>
