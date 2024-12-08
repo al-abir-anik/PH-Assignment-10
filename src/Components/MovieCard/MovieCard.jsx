@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
+
 const MovieCard = ({ movie }) => {
+  const { user } = useContext(AuthContext);
 
   return (
     <div className="max-w-xs rounded-lg overflow-hidden shadow-lg bg-white">
@@ -14,9 +19,11 @@ const MovieCard = ({ movie }) => {
         <p className="text-sm text-gray-600">{movie.duration}</p>
         <p className="text-sm text-gray-600">{movie.releaseYear}</p>
         <p className="text-sm text-gray-600">{movie.rating}</p>
-        <button className="mt-4 w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">
-          See Details
-        </button>
+        <Link to={user ? `/movieDetails/${movie._id}` : "signIn"}>
+          <button className="mt-4 w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">
+            See Details
+          </button>
+        </Link>
       </div>
     </div>
   );
