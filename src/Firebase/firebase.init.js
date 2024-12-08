@@ -7,12 +7,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCNnalPkP428iA3Z0xJvXiJYEKbCqp7PSA",
-  authDomain: "movietrack-c021b.firebaseapp.com",
-  projectId: "movietrack-c021b",
-  storageBucket: "movietrack-c021b.firebasestorage.app",
-  messagingSenderId: "1003303519472",
-  appId: "1:1003303519472:web:705df70fad81d234b4ae35",
+  apiKey: import.meta.env.VITE_apiKey,
+  authDomain: import.meta.env.VITE_authDomain,
+  projectId: import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_messagingSenderId,
+  appId: import.meta.env.VITE_appId,
 };
 
 // Initialize Firebase

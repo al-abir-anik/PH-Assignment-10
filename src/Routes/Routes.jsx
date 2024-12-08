@@ -11,6 +11,7 @@ import AllMovies from "../Components/AllMovies/AllMovies";
 import ForgotPass from "../Components/NewUser/ForgotPass";
 import MovieDetails from "../Components/MovieCard/MovieDetails";
 import UpdateMovie from "../Components/AddMovies/UpdateMovie";
+import SecureRoute from "./SecureRoute";
 
 const Routes = createBrowserRouter([
   {
@@ -25,11 +26,19 @@ const Routes = createBrowserRouter([
       },
       {
         path: "/signIn",
-        element: <SignIn></SignIn>,
+        element: (
+          <SecureRoute>
+            <SignIn></SignIn>
+          </SecureRoute>
+        ),
       },
       {
         path: "/signUp",
-        element: <SignUp></SignUp>,
+        element: (
+          <SecureRoute>
+            <SignUp></SignUp>
+          </SecureRoute>
+        ),
       },
       {
         path: "/forgotPassword",
