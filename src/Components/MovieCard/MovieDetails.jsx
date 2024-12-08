@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const MovieDetails = () => {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const movieData = useLoaderData();
   const movieCard = movieData.find((m) => m._id == id);
@@ -45,6 +47,25 @@ const MovieDetails = () => {
           });
       }
     });
+  };
+
+  const handleAddToFavourite = () => {
+    const requestInfo = {
+      userEmail: `${user.email}`,
+      movieId: `${_id}`,
+    };
+
+    fetch(`http://localhost:5000/favourites`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(requestInfo),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
   };
 
   return (
@@ -105,7 +126,10 @@ const MovieDetails = () => {
               />
             </div> */}
             <div className="space-x-3">
-              <button className="btn bg-[#9538e2] rounded-full text-white font-semibold text-lg px-10">
+              <button
+                onClick={handleAddToFavourite}
+                className="btn bg-[#9538e2] rounded-full text-white font-semibold text-lg px-10"
+              >
                 Add To Favourite
               </button>
               <button
@@ -114,9 +138,9 @@ const MovieDetails = () => {
               >
                 Delete Movie
               </button>
-              <Link to={"/updateMovie"}>
+              <Link to={`/updateMovie/${_id}`}>
                 <button className="btn bg-[#9538e2] rounded-full text-white font-semibold text-lg px-10">
-                 Update Movie
+                  Update Movie
                 </button>
               </Link>
             </div>

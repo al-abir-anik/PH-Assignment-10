@@ -6,7 +6,7 @@ import SignIn from "../Components/NewUser/SignIn";
 import SignUp from "../Components/NewUser/SignUp";
 import PrivateRoute from "./PrivateRoute";
 import AddMovies from "./../Components/AddMovies/AddMovies";
-import MyFavourites from "./../Components/MyFavourites/MyFavourites";
+import MyFavourites from "../Components/AllMovies/FavouriteMovies/MyFavourites";
 import AllMovies from "../Components/AllMovies/AllMovies";
 import ForgotPass from "../Components/NewUser/ForgotPass";
 import MovieDetails from "../Components/MovieCard/MovieDetails";
@@ -58,12 +58,14 @@ const Routes = createBrowserRouter([
         ),
       },
       {
-        path: "/updateMovie",
+        path: "/updateMovie/:id",
         element: (
           <PrivateRoute>
             <UpdateMovie></UpdateMovie>
           </PrivateRoute>
         ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/movie/${params.id}`),
       },
       {
         path: "/myFavourites",
@@ -72,6 +74,7 @@ const Routes = createBrowserRouter([
             <MyFavourites></MyFavourites>
           </PrivateRoute>
         ),
+        loader: () => fetch("http://localhost:5000/favourites"),
       },
     ],
   },

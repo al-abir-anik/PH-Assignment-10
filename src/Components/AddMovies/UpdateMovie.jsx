@@ -1,6 +1,21 @@
 import { useForm } from "react-hook-form";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const UpdateMovie = () => {
+  const navigate = useNavigate();
+  const movieData = useLoaderData();
+  const {
+    _id,
+    posterUrl,
+    title,
+    genre,
+    duration,
+    releaseYear,
+    rating,
+    summary,
+  } = movieData;
+
   const {
     register,
     handleSubmit,
@@ -9,9 +24,45 @@ const UpdateMovie = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log("submitting form", data);
-    const { title } = data;
+    const { title, posterUrl, genre, duration, releaseYear, summary } = data;
+    const updatedMovie = {
+      title,
+      posterUrl,
+      genre,
+      duration,
+      releaseYear,
+      summary,
+    };
 
+    // Send updatedMovie data to server
+    fetch(`http://localhost:5000/movie/${_id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(updatedMovie),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount > 0) {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Movie Updated Successfully",
+          });
+        }
+        navigate(`/movieDetails/${_id}`);
+      });
   };
 
   return (
@@ -47,6 +98,7 @@ const UpdateMovie = () => {
               <input
                 type="text"
                 placeholder="Enter movie title"
+                defaultValue={title}
                 required
                 {...register("title", {
                   minLength: {
@@ -69,6 +121,7 @@ const UpdateMovie = () => {
               <input
                 type="text"
                 placeholder="Enter movie poster image URL"
+                defaultValue={posterUrl}
                 required
                 {...register("posterUrl", {
                   pattern: {
@@ -90,7 +143,7 @@ const UpdateMovie = () => {
                 Genre *
               </label>
               <select
-                defaultValue=""
+                defaultValue={genre}
                 required
                 {...register("genre")}
                 className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -117,6 +170,7 @@ const UpdateMovie = () => {
               <input
                 type="number"
                 placeholder="Enter movie duration in minutes"
+                defaultValue={duration}
                 required
                 {...register("duration", {
                   valueAsNumber: true,
@@ -139,7 +193,7 @@ const UpdateMovie = () => {
                 Release Year *
               </label>
               <select
-                defaultValue=""
+                defaultValue={releaseYear}
                 required
                 {...register("releaseYear")}
                 className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -183,6 +237,7 @@ const UpdateMovie = () => {
               <textarea
                 placeholder="Enter movie summary"
                 rows="4"
+                defaultValue={summary}
                 required
                 {...register("summary", {
                   minLength: {
