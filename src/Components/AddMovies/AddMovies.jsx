@@ -1,32 +1,40 @@
-import { useState } from "react";
-import { Rating } from "react-simple-star-rating";
-import { toast } from "react-toastify";
+import { useContext, useState } from "react";
+// import { Rating } from "react-simple-star-rating";
+import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const AddMovies = () => {
-  const [rating, setRating] = useState(0);
-  //   const handleRating = (rate) => {
-  //     setRating(rate);
-  //   };
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  // const [rating, setRating] = useState(0);
+  // const handleRating = (rate) => {
+  //   setRating(rate);
+  // };
 
-  const handleAddMovie = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const title = form.title.value;
-    const posterUrl = form.posterUrl.value;
-    const genre = form.genre.value;
-    const duration = form.duration.value;
-    const releaseYear = form.releaseYear.value;
-    const summary = form.summary.value;
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    const { title, posterUrl, genre, duration, releaseYear, rating, summary } =
+      data;
     const newmovie = {
       title,
       posterUrl,
       genre,
       duration,
       releaseYear,
+      rating, // rating: rating,
       summary,
+      userEmail: user.email,
     };
+    console.log(newmovie);
 
-    // Send newMovie data to server
     fetch("https://movie-track-server.vercel.app/movie", {
       method: "POST",
       headers: {
@@ -38,7 +46,22 @@ const AddMovies = () => {
       .then((data) => {
         console.log(data);
         if (data.insertedId) {
-            toast.success("New Movie Added Successfully")
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "success",
+            title: "New Movie Added Successfully",
+          });
+          navigate("/allMovies");
         }
       });
   };
@@ -65,7 +88,7 @@ const AddMovies = () => {
           </p>
 
           <form
-            onSubmit={handleAddMovie}
+            onSubmit={handleSubmit(onSubmit)}
             className="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {/* Movie Title */}
@@ -77,8 +100,18 @@ const AddMovies = () => {
                 type="text"
                 name="title"
                 placeholder="Enter movie title"
+                required
+                {...register("title", {
+                  minLength: {
+                    value: 2,
+                    message: "Movie Title should be at least 2 characters.",
+                  },
+                })}
                 className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
+              {errors.title && (
+                <p className="text-red-600">{errors.title.message}</p>
+              )}
             </div>
 
             {/* Movie Poster */}
@@ -90,8 +123,19 @@ const AddMovies = () => {
                 type="text"
                 name="posterUrl"
                 placeholder="Enter movie poster image URL"
+                required
+                {...register("posterUrl", {
+                  pattern: {
+                    value:
+                      /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/.*)?$/,
+                    message: "Please enter a valid URL",
+                  },
+                })}
                 className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
+              {errors.posterUrl && (
+                <p className="text-red-500">{errors.posterUrl.message}</p>
+              )}
             </div>
 
             {/* Genre Dropdown */}
@@ -102,17 +146,24 @@ const AddMovies = () => {
               <select
                 name="genre"
                 defaultValue=""
+                required
+                {...register("genre")}
                 className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               >
                 <option value="" disabled>
                   Select genre
                 </option>
                 <option value="Action">Action</option>
+                <option value="Thriller">Thriller</option>
+                <option value="Crime">Crime</option>
                 <option value="Comedy">Comedy</option>
                 <option value="Drama">Drama</option>
                 <option value="Horror">Horror</option>
                 <option value="Sci-Fi">Sci-Fi</option>
               </select>
+              {errors.genre && (
+                <p className="text-red-500">{errors.genre.message}</p>
+              )}
             </div>
 
             {/* Movie Duration */}
@@ -124,8 +175,20 @@ const AddMovies = () => {
                 type="number"
                 name="duration"
                 placeholder="Enter movie duration"
-                className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+                {...register("duration", {
+                  valueAsNumber: true,
+                  min: {
+                    value: 60,
+                    message: "Duration must be greater than 60 minutes",
+                  },
+                })}
+                className="w-full border border-gray-300
+                 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
+              {errors.duration && (
+                <p className="text-red-500">{errors.duration.message}</p>
+              )}
             </div>
 
             {/* Release Year Dropdown */}
@@ -136,6 +199,8 @@ const AddMovies = () => {
               <select
                 name="releaseYear"
                 defaultValue=""
+                required
+                {...register("releaseYear")}
                 className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               >
                 <option value="" disabled>
@@ -150,21 +215,55 @@ const AddMovies = () => {
                   );
                 })}
               </select>
+              {errors.releaseYear && (
+                <p className="text-red-500">{errors.releaseYear.message}</p>
+              )}
             </div>
 
             {/* Movie Rating */}
             {/* <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Rating *
+                Rating (1-5)*
               </label>
-              <div className="flex items-center">
+              <div className="flex">
                 <Rating
-                  size={25}
+                  onClick={handleRating}
+                  ratingValue={rating}
+                  size={40}
                   allowHalfIcon={true}
-                  className="inline-block text-yellow-500"
+                  SVGstyle={{ display: "inline-block" }}
+                  className="text-yellow-500"
                 />
               </div>
+              {rating === 0 && (
+                <p className="text-red-500">Please select a rating</p>
+              )}
             </div> */}
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Movie Rating (1 to 5) *
+              </label>
+              <input
+                type="number"
+                placeholder="Rate the movie (1 to 5)"
+                required
+                {...register("rating", {
+                  valueAsNumber: true,
+                  min: {
+                    value: 1,
+                    message: "Rating must be at least 1",
+                  },
+                  max: {
+                    value: 5,
+                    message: "Rating cannot exceed 5",
+                  },
+                })}
+                className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+              {errors.rating && (
+                <p className="text-red-500">{errors.rating.message}</p>
+              )}
+            </div>
 
             {/* Movie Summary */}
             <div className="col-span-1 md:col-span-2">
@@ -175,8 +274,18 @@ const AddMovies = () => {
                 name="summary"
                 placeholder="Enter movie summary"
                 rows="4"
+                required
+                {...register("summary", {
+                  minLength: {
+                    value: 10,
+                    message: "Movie Summary should be at least 10 characters.",
+                  },
+                })}
                 className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               ></textarea>
+              {errors.summary && (
+                <p className="text-red-500">{errors.summary.message}</p>
+              )}
             </div>
 
             {/* Submit Button */}

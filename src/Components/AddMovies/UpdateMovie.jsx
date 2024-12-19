@@ -24,13 +24,15 @@ const UpdateMovie = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    const { title, posterUrl, genre, duration, releaseYear, summary } = data;
+    const { title, posterUrl, genre, duration, releaseYear, rating, summary } =
+      data;
     const updatedMovie = {
       title,
       posterUrl,
       genre,
       duration,
       releaseYear,
+      rating,
       summary,
     };
 
@@ -216,18 +218,32 @@ const UpdateMovie = () => {
             </div>
 
             {/* Movie Rating */}
-            {/* <div>
+            <div>
               <label className="block text-gray-700 font-medium mb-1">
-                Rating *
+                Movie Rating (1 to 5) *
               </label>
-              <div className="flex items-center">
-                <Rating
-                  size={25}
-                  allowHalfIcon={true}
-                  className="inline-block text-yellow-500"
-                />
-              </div>
-            </div> */}
+              <input
+                type="number"
+                placeholder="Rate the movie (1 to 5)"
+                defaultValue={rating}
+                required
+                {...register("rating", {
+                  valueAsNumber: true,
+                  min: {
+                    value: 1,
+                    message: "Rating must be at least 1",
+                  },
+                  max: {
+                    value: 5,
+                    message: "Rating cannot exceed 5",
+                  },
+                })}
+                className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+              {errors.rating && (
+                <p className="text-red-500">{errors.rating.message}</p>
+              )}
+            </div>
 
             {/* Movie Summary */}
             <div className="col-span-1 md:col-span-2">

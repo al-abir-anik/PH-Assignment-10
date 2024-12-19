@@ -1,13 +1,25 @@
 const Footer = () => {
   return (
     <footer className="footer footer-center bg-base-200 text-base-content rounded p-10">
-      <nav className="grid grid-flow-col gap-4">
+      {/* Website Name */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-800">MovieTrack</h2>
+        <p className="text-gray-600 mt-2">
+          Your ultimate companion for tracking and exploring movies. Stay
+          updated with the latest in the world of cinema!
+        </p>
+      </div>
+
+      {/* Navigation Links */}
+      <nav className="grid grid-flow-col gap-4 mt-4">
         <a className="link link-hover">About us</a>
         <a className="link link-hover">Contact</a>
         <a className="link link-hover">Jobs</a>
         <a className="link link-hover">Press kit</a>
       </nav>
-      <nav>
+
+      {/* Social Media Links */}
+      <nav className="mt-4">
         <div className="grid grid-flow-col gap-4">
           <a href="https://x.com/alAbirAnik" target="_blank">
             <svg
@@ -44,9 +56,12 @@ const Footer = () => {
           </a>
         </div>
       </nav>
-      <aside>
+
+      {/* Copyright */}
+      <aside className="mt-6">
         <p>
-          Copyright © {new Date().getFullYear()} - All right reserved by MovieTrack
+          Copyright © {new Date().getFullYear()} - All rights reserved by{" "}
+          <span className="font-bold">MovieTrack</span>
         </p>
       </aside>
     </footer>

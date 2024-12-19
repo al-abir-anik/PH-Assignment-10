@@ -5,13 +5,14 @@ import Home from "../Components/Home/Home";
 import SignIn from "../Components/NewUser/SignIn";
 import SignUp from "../Components/NewUser/SignUp";
 import PrivateRoute from "./PrivateRoute";
-import AddMovies from "./../Components/AddMovies/AddMovies";
 import MyFavourites from "../Components/AllMovies/FavouriteMovies/MyFavourites";
 import AllMovies from "../Components/AllMovies/AllMovies";
 import ForgotPass from "../Components/NewUser/ForgotPass";
+import AddMovies from "./../Components/AddMovies/AddMovies";
 import MovieDetails from "../Components/MovieCard/MovieDetails";
 import UpdateMovie from "../Components/AddMovies/UpdateMovie";
 import SecureRoute from "./SecureRoute";
+import About from "../Components/About/About";
 
 const Routes = createBrowserRouter([
   {
@@ -22,7 +23,8 @@ const Routes = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
-        loader: () => fetch("https://movie-track-server.vercel.app/movie"),
+        loader: () =>
+          fetch("https://movie-track-server.vercel.app/featuredMovies"),
       },
       {
         path: "/signIn",
@@ -84,6 +86,10 @@ const Routes = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: () => fetch("https://movie-track-server.vercel.app/favourites"),
+      },
+      {
+        path: "/about",
+        element: <About></About>,
       },
     ],
   },

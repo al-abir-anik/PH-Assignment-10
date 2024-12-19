@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 
@@ -13,6 +13,29 @@ const Navbar = () => {
       .catch((error) => {
         console.log("ERROR", error.message);
       });
+  };
+
+  // State to manage the current theme
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Load the theme from localStorage on component mount
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme === "dark") {
+      setIsDarkMode(true);
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  }, []);
+
+  // Toggle the theme and save it to localStorage
+  const toggleTheme = () => {
+    const newTheme = isDarkMode ? "light" : "dark";
+    setIsDarkMode(!isDarkMode);
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
   };
 
   return (
@@ -43,48 +66,42 @@ const Navbar = () => {
         </ul>
       </div>
 
-      <div className="flex-none gap-12">
+      <div className="flex-none gap-8">
         {user ? (
           <button onClick={handleSignOut} className="btn">
             Log Out
           </button>
         ) : (
-          <Link to="/signIn">
-            <button className="btn">Sign In</button>
-          </Link>
+          <div className="space-x-6">
+            <Link to="/signIn">
+              <button className="btn">Sign In</button>
+            </Link>
+            <Link to="/signUp">
+              <button className="btn">Sign Up</button>
+            </Link>
+          </div>
         )}
 
-        <div className="dropdown dropdown-end">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
-          >
-            <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              />
+        {/* Theme toggle button */}
+        <button onClick={toggleTheme} className="btn btn-ghost">
+          {isDarkMode ? "Light Mode" : "Dark Mode"}
+        </button>
+
+        {user && (
+          <div className="dropdown dropdown-end">
+            <div className="btn btn-ghost btn-circle avatar relative group">
+              <div className="w-10 rounded-full">
+                <img src={user.photoURL} />
+              </div>
+
+              {user && (
+                <span className="absolute top-1/2 -translate-y-1/2 right-full mr-2 w-max bg-gray-800 text-white text-sm font-semibold py-2 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                  {user?.displayName}
+                </span>
+              )}
             </div>
           </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-          >
-            <li>
-              <a className="justify-between">
-                Profile
-                <span className="badge">New</span>
-              </a>
-            </li>
-            <li>
-              <a>Settings</a>
-            </li>
-            <li>
-              <a>Logout</a>
-            </li>
-          </ul>
-        </div>
+        )}
       </div>
     </nav>
   );

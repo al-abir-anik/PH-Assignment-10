@@ -9,24 +9,19 @@ const Slider = () => {
   const slides = [
     {
       id: 1,
-      img: "https://i.ibb.co.com/sgRFjGY/pexels-sabel-blanco-662810-2615031.jpg",
-      alt: "Australia",
+      img: "https://i.ibb.co.com/zVZCgFH/1xtKO9d.jpg",
+      // alt: "Australia",
     },
     {
       id: 2,
-      img: "https://i.ibb.co.com/10rB7Zj/pexels-eclipse-chasers-716719984-18285370.jpg",
-      alt: "Sydney, NSW, Australia",
+      img: "https://i.ibb.co.com/nCJdWj3/wp1930550-better-call-saul-wallpapers.jpg",
+      // alt: "Sydney, NSW, Australia",
     },
 
     {
       id: 3,
-      img: "https://i.ibb.co.com/MsTDV3j/pexels-quang-nguyen-vinh-222549-2132003.jpg",
-      alt: "Sơn Trà, Đà Nẵng, Vietnam",
-    },
-    {
-      id: 4,
-      img: "https://i.ibb.co.com/68HGVsd/pexels-roodzn-12026138.jpg",
-      alt: "Tulum, Q.R., México",
+      img: "https://i.ibb.co.com/ncv7Ws2/wp4662517.jpg",
+      // alt: "Sơn Trà, Đà Nẵng, Vietnam",
     },
   ];
 
@@ -40,12 +35,12 @@ const Slider = () => {
         pagination={{ clickable: true }}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         loop
-        className="w-full h-[35rem]"
+        className="w-full h-[45rem]"
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
             <div
-              className="w-full h-full bg-cover bg-center bg"
+              className="w-full h-full bg-cover bg-center"
               style={{
                 backgroundImage: `url(${slide.img})`,
               }}

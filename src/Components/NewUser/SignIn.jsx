@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
-import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const SignIn = () => {
   const { signInUser, signInWithGoogle } = useContext(AuthContext);
@@ -18,9 +18,24 @@ const SignIn = () => {
     signInUser(email, password)
       .then((result) => {
         console.log(result.user);
-        toast.success("Signed In Succesfully!");
         e.target.reset();
         navigate("/");
+
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Signed in Successfully",
+        });
       })
       .catch((error) => {
         console.log("ERROR", error.message);
@@ -41,12 +56,26 @@ const SignIn = () => {
     signInWithGoogle()
       .then((result) => {
         console.log(result);
-        toast.success("Signed In Succesfully!");
         navigate("/");
+
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Signed In Successfully",
+        });
       })
       .catch((error) => {
         console.log("ERROR", error.message);
-        toast.error("ERROR", error.message);
       });
   };
 
